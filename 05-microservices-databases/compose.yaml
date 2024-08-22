@@ -2,7 +2,7 @@ version: '3'
 services:
   # ----- ecommerce-ui -----
   ecommerce-ui:
-    image: man7ober/ecommerce-ui
+    image: man7ober/ecommerce-ui:latest
     container_name: ecommerce-ui
     ports:
       - '4000:4000'
@@ -23,7 +23,7 @@ services:
 
   # ----- profile-management -----
   profile-management:
-    image: man7ober/profile-management
+    image: man7ober/profile-management:latest
     container_name: profile-management
     ports:
       - '3003:3003'
@@ -50,7 +50,7 @@ services:
   # ----- product-inventory -----
 
   product-inventory:
-    image: man7ober/product-inventory
+    image: man7ober/product-inventory:latest
     container_name: product-inventory
     ports:
       - '3002:3002'
@@ -76,7 +76,7 @@ services:
   # ----- order-management -----
 
   order-management:
-    image: man7ober/order-management
+    image: man7ober/order-management:latest
     container_name: order-management
     ports:
       - '9090:9090'
@@ -97,7 +97,7 @@ services:
   # ----- product-catalog -----
 
   product-catalog:
-    image: man7ober/product-catalog
+    image: man7ober/product-catalog:latest
     container_name: product-catalog
     ports:
       - '3001:3001'
@@ -117,7 +117,7 @@ services:
   # ----- contact-support -----
 
   contact-support:
-    image: man7ober/contact-support-team
+    image: man7ober/contact-support:latest
     container_name: contact-support
     ports:
       - '8000:8000'
@@ -137,7 +137,7 @@ services:
   # ----- shipping-and-handling -----
 
   shipping-and-handling:
-    image: man7ober/shipping-and-handling
+    image: man7ober/shipping-and-handling:latest
     container_name: shipping-and-handling
     ports:
       - '8080:8080'
