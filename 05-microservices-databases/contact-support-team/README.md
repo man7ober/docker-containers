@@ -7,18 +7,10 @@ This Docker image provides a microservice for handling contact messages and form
 To run a container from this image, use the following command:
 
 ```bash
-docker run -p 8000:8000 contact-support-microservice
+docker run -p 8000:8000 -e MONGODB_HOST=<mongo_host> -e MONGODB_PORT=<mongo_port> -e MONGODB_DATABASE=<mongo_database> contact-support
 ```
 
 The microservice will be accessible at `http://localhost:8000`.
-
-## Version 2.0.0 Update
-
-In version 2.0.0, the Contact Support Microservice is updated to include database integration, which relies on environment variables to establish a connection with a MongoDB database for storing and retrieving contact messages.
-
-```
-docker run -p 8000:8000 -e MONGODB_HOST=<mongo_host> -e MONGODB_PORT=<mongo_port> -e MONGODB_DATABASE=<mongo_database> contact-support-microservice
-```
 
 ### API Endpoints
 
@@ -44,7 +36,7 @@ To enable communication between the Contact Support microservice and other micro
 
 2. Run the Contact Support microservice container with the `--network` flag:
    ```bash
-   docker run --network my-network -p 8000:8000 contact-support-microservice
+   docker run --network my-network -p 8000:8000 contact-support
    ```
 
 3. Run other microservice or application containers on the same network:
@@ -62,9 +54,9 @@ If you want to build the Docker image yourself, follow these steps:
 2. Navigate to the directory where the Dockerfile is located.
 3. Run the following command to build the image:
    ```bash
-   docker build -t contact-support-microservice .
+   docker build -t contact-support .
    ```
-   This command will build the Docker image using the provided Dockerfile and tag it as `contact-support-microservice`.
+   This command will build the Docker image using the provided Dockerfile and tag it as `contact-support`.
 
 ## Contributing
 
