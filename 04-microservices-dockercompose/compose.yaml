@@ -1,0 +1,65 @@
+version: '3'
+services:
+  ecommerce-ui:
+    build: ./ecommerce-ui
+    container_name: ecommerce-ui
+    ports:
+      - '4000:4000'
+    environment:
+      - REACT_APP_PROFILE_API_HOST=http://profile-management
+      - REACT_APP_SHIPPING_API_HOST=http://shipping-and-handling
+      - REACT_APP_CONTACT_API_HOST=http://contact-support-team
+      - REACT_APP_INVENTORY_API_HOST=http://product-inventory
+      - REACT_APP_PRODUCT_API_HOST=http://product-catalog
+      - REACT_APP_ORDER_API_HOST=http://order-management
+    depends_on:
+      - profile-management
+      - shipping-and-handling
+      - contact-support-team
+      - product-inventory
+      - product-catalog
+      - order-management
+
+  profile-management:
+    build: ./profile-management
+    container_name: profile-management
+    ports:
+      - '3003:3003'
+
+  shipping-and-handling:
+    build: ./shipping-and-handling
+    container_name: shipping-and-handling
+    ports:
+      - '8080:8080'
+
+  contact-support-team:
+    build: ./contact-support-team
+    container_name: contact-support-team
+    ports:
+      - '8000:8000'
+
+  product-inventory:
+    build: ./product-inventory
+    container_name: product-inventory
+    ports:
+      - '3002:3002'
+
+  product-catalog:
+    build: ./product-catalog
+    container_name: product-catalog
+    ports:
+      - '3001:3001'
+
+  order-management:
+    build: ./order-management
+    container_name: order-management
+    ports:
+      - '9090:9090'
+    environment:
+      - SHIPPING_HANDLING_API_HOST=http://shipping-and-handling
+      - PRODUCT_INVENTORY_API_HOST=http://product-inventory
+      - PRODUCT_CATALOG_API_HOST=http://product-catalog
+    depends_on:
+      - shipping-and-handling
+      - product-inventory
+      - product-catalog
