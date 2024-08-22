@@ -4,7 +4,7 @@ Docker Image = consist of environment, source code and dependencies
 
 Docker Container = consist of docker image + run command
 
-**01 - Run / Stop Container**
+**01 - Run / Start / Stop Container**
 
 ```bash
 docker run <IMAGE-NAME>
