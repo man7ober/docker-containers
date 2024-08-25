@@ -1,0 +1,160 @@
+version: '3'
+services:
+  # ----- ecommerce-ui -----
+  ecommerce-ui:
+    image: man7ober/ecommerce-ui:latest
+    container_name: ecommerce-ui
+    ports:
+      - '4000:4000'
+    environment:
+      - REACT_APP_PROFILE_API_HOST=http://profile-management
+      - REACT_APP_SHIPPING_API_HOST=http://shipping-and-handling
+      - REACT_APP_CONTACT_API_HOST=http://contact-support
+      - REACT_APP_INVENTORY_API_HOST=http://product-inventory
+      - REACT_APP_PRODUCT_API_HOST=http://product-catalog
+      - REACT_APP_ORDER_API_HOST=http://order-management
+    depends_on:
+      - profile-management
+      - product-inventory
+      - order-management
+      - product-catalog
+      - contact-support
+      - shipping-and-handling
+
+  # ----- profile-management -----
+  profile-management:
+    image: man7ober/profile-management:latest
+    container_name: profile-management
+    ports:
+      - '3003:3003'
+    environment:
+      - MYSQL_HOST=mysql_profile
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=profile_management
+      - MYSQL_USER=profile_user
+      - MYSQL_PASSWORD=profile_password
+    depends_on:
+      - mysql_profile
+
+  mysql_profile: # runs on port 3306
+    image: mysql:8.0
+    container_name: mysql_profile
+    environment:
+      - MYSQL_DATABASE=profile_management
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_USER=profile_user
+      - MYSQL_PASSWORD=profile_password
+    volumes:
+      - mysql_profile_data:/var/lib/mysql
+
+  # ----- product-inventory -----
+
+  product-inventory:
+    image: man7ober/product-inventory:latest
+    container_name: product-inventory
+    ports:
+      - '3002:3002'
+    environment:
+      - POSTGRES_HOST=postgres_inventory
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=product_inventory
+      - POSTGRES_USER=inventory_user
+      - POSTGRES_PASSWORD=inventory_password
+    depends_on:
+      - postgres_inventory
+
+  postgres_inventory: # runs on port 5432
+    image: postgres:13
+    container_name: postgres_inventory
+    environment:
+      - POSTGRES_DB=product_inventory
+      - POSTGRES_USER=inventory_user
+      - POSTGRES_PASSWORD=inventory_password
+    volumes:
+      - postgres_inventory_data:/var/lib/postgresql/data
+
+  # ----- order-management -----
+
+  order-management:
+    image: man7ober/order-management:latest
+    container_name: order-management
+    ports:
+      - '9090:9090'
+    environment:
+      - SHIPPING_HANDLING_API_HOST=http://shipping-and-handling
+      - PRODUCT_INVENTORY_API_HOST=http://product-inventory
+      - PRODUCT_CATALOG_API_HOST=http://product-catalog
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb_order:27017/order-management
+    depends_on:
+      - mongodb_order
+
+  mongodb_order: # runs on port 27017
+    image: mongo
+    container_name: mongodb_order
+    volumes:
+      - mongodb_order_data:/data/db
+
+  # ----- product-catalog -----
+
+  product-catalog:
+    image: man7ober/product-catalog:latest
+    container_name: product-catalog
+    ports:
+      - '3001:3001'
+    environment:
+      - MONGODB_HOST=mongodb_catalog
+      - MONGODB_PORT=27017
+      - MONGODB_DATABASE=product_catalog
+    depends_on:
+      - mongodb_catalog
+
+  mongodb_catalog:
+    image: mongo
+    container_name: mongodb_catalog
+    volumes:
+      - mongodb_catalog_data:/data/db
+
+  # ----- contact-support -----
+
+  contact-support:
+    image: man7ober/contact-support:latest
+    container_name: contact-support
+    ports:
+      - '8000:8000'
+    environment:
+      - MONGODB_HOST=mongodb_contact
+      - MONGODB_PORT=27017
+      - MONGODB_DATABASE=contact_support
+    depends_on:
+      - mongodb_contact
+
+  mongodb_contact:
+    image: mongo
+    container_name: mongodb_container
+    volumes:
+      - mongodb_contact_data:/data/db
+
+  # ----- shipping-and-handling -----
+
+  shipping-and-handling:
+    image: man7ober/shipping-and-handling:latest
+    container_name: shipping-and-handling
+    ports:
+      - '8080:8080'
+    environment:
+      - MONGO_URI=mongodb://mongodb_shipping:27017
+
+  mongodb_shipping:
+    image: mongo
+    container_name: mongodb_shipping
+    volumes:
+      - mongodb_shipping_data:/data/db
+
+# named volumes
+volumes:
+  mongodb_catalog_data:
+  mongodb_contact_data:
+  mongodb_shipping_data:
+  mongodb_order_data:
+  mysql_profile_data:
+  postgres_inventory_data:
